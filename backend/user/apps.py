@@ -3,5 +3,4 @@ from django.apps import AppConfig
 
 class UserConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'mycloud.user'
-    label = 'mycloud_user'
+    name = 'user'

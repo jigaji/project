@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from user.models import User
 from django.db.models import Q
 from django.utils import timezone
 import shutil
@@ -31,7 +31,7 @@ class Folder(models.Model):
     folder = models.ForeignKey('self',on_delete=models.CASCADE, related_name='folders_within', null=True)
     size = models.IntegerField(null=True)
     upload_date = models.DateField(default=timezone.now, editable=False)
-    public_download_id = models.CharField(get_current_location, editable=False)
+    share_link = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.user} - {self.name}"
@@ -62,7 +62,7 @@ class File(models.Model):
     comment = models.TextField(null=True, blank=True)
     size = models.IntegerField(null=True)
     upload_date = models.DateField(default=timezone.now, editable=False)
-    public_download_id = models.CharField(get_file_location, editable=False)
+    share_link = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.files}"

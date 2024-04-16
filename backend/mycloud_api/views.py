@@ -1,29 +1,54 @@
-from rest_framework.viewsets import ViewSet
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from .serializer import FileSerializer, FolderSerializer
+from .serializers import FileSerializer, FolderSerializer
+from .models import File, Folder
 
 # Create your views here.
 
 
-class FileViewSet(ViewSet):
-    http_method_names = ("post", "get", "put", "delete")
-    permission_classes = (IsAuthenticated)
+class FileList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = FileSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return serializer.data
+    def get_queryset(self):
+        user = self.request.user
+        return File.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        else:
+            print(serializer.errors)
 
 
-class FileViewSet(ViewSet):
-    http_method_names = ("post", "get", "put", "delete")
-    permission_classes = (IsAuthenticated)
+class FileDelete(generics.DestroyAPIView):
+    serializer_class = FileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return File.objects.filter(autuser=user)
+    
+
+class FolderList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = FolderSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return serializer.data
+    def get_queryset(self):
+        user = self.request.user
+        return Folder.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        else:
+            print(serializer.errors)
+
+
+class FolderDelete(generics.DestroyAPIView):
+    serializer_class = FolderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Folder.objects.filter(autuser=user)
