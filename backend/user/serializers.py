@@ -20,7 +20,6 @@ class MyTokenObtaoinPairSerialiser(TokenObtainPairSerializer):
         token['full_name'] = user.profile.full_name
         token['username'] = user.username
         token['email'] = user.email
-        token['photo'] = user.profile.photo
 
         return token
 
@@ -43,7 +42,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
            
     class Meta:
         model = User
-        fields = ['id','full_name', 'email', 'username', 'photo' 'password', 'password2',]
+        fields = ['id','full_name', 'email', 'username', 'password', 'password2',]
         
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:

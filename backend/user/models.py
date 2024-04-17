@@ -10,11 +10,11 @@ def get_profile_img_path(instance, filename):
     return f"{instance.user.username}/profile/{filename}"
 
 class User(AbstractUser):
-    username = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, unique = True)
     email = models.EmailField(unique = True)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def profile(self):
         profile = Profile.objects.get(user=self)
