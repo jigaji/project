@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { createContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 export default AuthContext
 
@@ -25,14 +26,14 @@ export const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate()
 
-    const loginUser = async (email, password) => {
+    const loginUser = async (username, password) => {
         let url = "http://127.0.0.1:8000/token/"
         const response = await fetch(url,{
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify({username, password})
         })
         const data = await response.json()
 
@@ -135,7 +136,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={contextData}>
-            {loading ? null : children}
+            {children}
         </AuthContext.Provider>
     )
 }
